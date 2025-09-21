@@ -14,7 +14,6 @@ import { FadeIn } from "@/components/animations/fade-in"
 import { SlideIn } from "@/components/animations/slide-in"
 import { StaggerContainer, StaggerItem } from "@/components/animations/stagger-container"
 import { ScaleOnHover } from "@/components/animations/scale-on-hover"
-import { OrderList } from "@/components/order-list"
 
 const metrics = [
   {
@@ -91,7 +90,6 @@ const topProducts = [
   { name: "Marco Shoes", price: "$79.49", quantity: 64, amount: "$1,965.81" },
 ]
 
-
 export function EcommerceDashboard() {
   const [currentPage, setCurrentPage] = useState(1)
   const [isLoading, setIsLoading] = useState(false)
@@ -117,28 +115,28 @@ export function EcommerceDashboard() {
   }
 
   return (
-    <div className="space-y-6">
+    <div className="w-full max-w-full p-4 sm:p-6 space-y-4 sm:space-y-6 overflow-x-hidden">
       {/* Page title */}
       <FadeIn>
-        <h1 className="text-2xl font-semibold text-foreground font-inter">eCommerce</h1>
+        <h1 className="text-xl sm:text-2xl font-semibold text-foreground font-inter">eCommerce</h1>
       </FadeIn>
 
       {/* Top section - Metrics and Projections */}
-      <div className="grid gap-6 lg:grid-cols-2 mb-6">
+      <div className="grid gap-4 sm:gap-6 grid-cols-1 lg:grid-cols-2 mb-4 sm:mb-6">
         {/* Metrics cards - 2x2 grid */}
-        <div className="lg:col-span-1">
-          <div className="grid gap-4 grid-cols-2 h-full">
+        <div className="lg:col-span-1 w-full">
+          <div className="grid gap-3 sm:gap-4 grid-cols-1 sm:grid-cols-2 h-full">
             {metrics.map((metric, index) => (
-              <Card key={metric.title} className="transition-all duration-300  cursor-pointer group h-full bg-white border border-gray-200">
-                <CardContent className="p-6 h-full flex flex-col justify-center">
+              <Card key={metric.title} className="transition-all duration-300 cursor-pointer group h-full bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 min-h-[120px] sm:min-h-[140px] shadow-sm">
+                <CardContent className="p-4 sm:p-6 h-full flex flex-col justify-center">
                   <div className="flex items-center justify-between">
-                    <div className="group-hover:scale-105 transition-transform duration-300">
-                      <p className="text-sm font-medium text-muted-foreground group-hover:text-foreground transition-colors duration-300 font-inter">{metric.title}</p>
-                      <p className="text-2xl font-bold mt-1 group-hover:text-primary transition-colors duration-300 font-inter">{metric.value}</p>
+                    <div className="group-hover:scale-105 transition-transform duration-300 min-w-0 flex-1">
+                      <p className="text-xs sm:text-sm font-medium text-muted-foreground group-hover:text-foreground transition-colors duration-300 font-inter truncate">{metric.title}</p>
+                      <p className="text-lg sm:text-2xl font-bold mt-1 group-hover:text-primary transition-colors duration-300 font-inter truncate">{metric.value}</p>
                     </div>
                     <div
                       className={cn(
-                        "flex items-center gap-1 text-sm font-medium px-2 py-1 rounded-full transition-all duration-300 group-hover:scale-110 font-inter",
+                        "flex items-center gap-1 text-xs sm:text-sm font-medium px-2 py-1 rounded-full transition-all duration-300 group-hover:scale-110 font-inter flex-shrink-0 ml-2",
                         metric.trend === "up"
                           ? "text-green-700 bg-green-100 dark:text-green-400 dark:bg-green-950 group-hover:bg-green-200 dark:group-hover:bg-green-900"
                           : "text-red-700 bg-red-100 dark:text-red-400 dark:bg-red-950 group-hover:bg-red-200 dark:group-hover:bg-red-900",
@@ -149,7 +147,7 @@ export function EcommerceDashboard() {
                       ) : (
                         <TrendingDown className="h-3 w-3 animate-pulse" />
                       )}
-                      {metric.change}
+                      <span className="hidden xs:inline">{metric.change}</span>
                     </div>
                   </div>
                 </CardContent>
@@ -159,32 +157,34 @@ export function EcommerceDashboard() {
         </div>
 
         {/* Projections vs Actuals Chart - Right side */}
-        <div className="lg:col-span-1">
-          <Card className="transition-all duration-300  group h-full bg-white border border-gray-200">
-            <CardHeader className="group-hover:bg-muted/30 transition-colors duration-300">
-              <CardTitle className="group-hover:text-primary transition-colors duration-300 text-sm font-inter">Projections vs Actuals</CardTitle>
+        <div className="lg:col-span-1 w-full">
+          <Card className="transition-all duration-300 group h-full bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow-sm">
+            <CardHeader className="group-hover:bg-muted/30 transition-colors duration-300 pb-2 sm:pb-6">
+              <CardTitle className="group-hover:text-primary transition-colors duration-300 text-sm sm:text-base font-inter">Projections vs Actuals</CardTitle>
             </CardHeader>
-            <CardContent className="flex-1">
-              <AdvancedBarChart data={projectionsData} />
+            <CardContent className="flex-1 p-2 sm:p-6 pt-0">
+              <div className="w-full overflow-x-auto">
+                <AdvancedBarChart data={projectionsData} />
+              </div>
             </CardContent>
           </Card>
         </div>
       </div>
 
       {/* Middle section - Revenue Chart */}
-      <div className="grid gap-6 lg:grid-cols-3 mb-6">
+      <div className="grid gap-4 sm:gap-6 grid-cols-1 lg:grid-cols-3 mb-4 sm:mb-6">
         {/* Revenue Chart - Large Middle Chart */}
-        <div className="lg:col-span-2">
-          <Card className="transition-all duration-300  group h-full bg-white border border-gray-200">
-            <CardHeader className="flex flex-row items-center justify-between group-hover:bg-muted/30 transition-colors duration-300">
-              <CardTitle className="group-hover:text-primary transition-colors duration-300 font-inter">Revenue</CardTitle>
+        <div className="lg:col-span-2 w-full">
+          <Card className="transition-all duration-300 group h-full bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow-sm">
+            <CardHeader className="flex flex-col sm:flex-row sm:items-center justify-between group-hover:bg-muted/30 transition-colors duration-300 gap-4 pb-2 sm:pb-6">
+              <CardTitle className="group-hover:text-primary transition-colors duration-300 font-inter text-sm sm:text-base">Revenue</CardTitle>
               
               {/* Timeframe Toggle */}
-              <div className="flex items-center gap-4">
-                <div className="flex bg-muted rounded-lg p-1">
+              <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 sm:gap-4 w-full sm:w-auto">
+                <div className="flex bg-muted rounded-lg p-1 w-full sm:w-auto">
                   <button
                     onClick={() => setRevenueTimeframe('monthly')}
-                    className={`px-3 py-1 text-xs font-medium rounded-md transition-all duration-200 ${
+                    className={`px-3 py-1 text-xs font-medium rounded-md transition-all duration-200 flex-1 sm:flex-initial ${
                       revenueTimeframe === 'monthly'
                         ? 'bg-background text-foreground shadow-sm'
                         : 'text-muted-foreground hover:text-foreground'
@@ -194,7 +194,7 @@ export function EcommerceDashboard() {
                   </button>
                   <button
                     onClick={() => setRevenueTimeframe('yearly')}
-                    className={`px-3 py-1 text-xs font-medium rounded-md transition-all duration-200 ${
+                    className={`px-3 py-1 text-xs font-medium rounded-md transition-all duration-200 flex-1 sm:flex-initial ${
                       revenueTimeframe === 'yearly'
                         ? 'bg-background text-foreground shadow-sm'
                         : 'text-muted-foreground hover:text-foreground'
@@ -204,16 +204,16 @@ export function EcommerceDashboard() {
                   </button>
                 </div>
                 
-                <div className="flex items-center gap-6 text-sm">
+                <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2 sm:gap-6 text-xs sm:text-sm w-full sm:w-auto">
                   <div className="flex items-center gap-2 group-hover:scale-105 transition-transform duration-300">
-                    <div className="w-3 h-3 bg-black rounded-full" />
+                    <div className="w-3 h-3 bg-black rounded-full flex-shrink-0" />
                     <span className="text-muted-foreground font-inter">Current {revenueTimeframe === 'monthly' ? 'Week' : 'Year'}</span>
                     <span className="font-semibold group-hover:text-primary transition-colors duration-300 font-inter">
                       {revenueTimeframe === 'monthly' ? '$58,211' : '$2,800K'}
                     </span>
                   </div>
                   <div className="flex items-center gap-2 group-hover:scale-105 transition-transform duration-300">
-                    <div className="w-3 h-3 bg-blue-300 rounded-full" />
+                    <div className="w-3 h-3 bg-blue-300 rounded-full flex-shrink-0" />
                     <span className="text-muted-foreground font-inter">Previous {revenueTimeframe === 'monthly' ? 'Week' : 'Year'}</span>
                     <span className="font-semibold group-hover:text-primary transition-colors duration-300 font-inter">
                       {revenueTimeframe === 'monthly' ? '$68,768' : '$2,600K'}
@@ -222,119 +222,122 @@ export function EcommerceDashboard() {
                 </div>
               </div>
             </CardHeader>
-            <CardContent className="flex-1">
-              <AdvancedLineChart 
-                data={revenueTimeframe === 'monthly' ? monthlyRevenueData : yearlyRevenueData} 
-                timeframe={revenueTimeframe}
-              />
+            <CardContent className="flex-1 p-2 sm:p-6 pt-0">
+              <div className="w-full overflow-x-auto">
+                <AdvancedLineChart 
+                  data={revenueTimeframe === 'monthly' ? monthlyRevenueData : yearlyRevenueData} 
+                  timeframe={revenueTimeframe}
+                />
+              </div>
             </CardContent>
           </Card>
         </div>
 
         {/* Right column - Revenue by Location */}
-        <div className="lg:col-span-1">
-          <Card className="h-full transition-all duration-300  bg-white border border-gray-200">
-            <CardHeader>
-              <CardTitle className="text-sm font-inter">Revenue by Location</CardTitle>
+        <div className="lg:col-span-1 w-full">
+          <Card className="h-full transition-all duration-300 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow-sm">
+            <CardHeader className="pb-2 sm:pb-6">
+              <CardTitle className="text-sm sm:text-base font-inter">Revenue by Location</CardTitle>
             </CardHeader>
-            <CardContent>
-                <div className="space-y-6">
-                  {/* World map with location markers */}
-                  <div className="relative h-48 bg-gradient-to-br from-blue-50 to-blue-100 dark:from-blue-950/20 dark:to-blue-900/20 rounded-lg overflow-hidden">
-                    {/* Simplified world map background */}
-                    <div className="absolute inset-0 opacity-20">
-                      <svg viewBox="0 0 400 200" className="w-full h-full">
-                        <path
-                          d="M50 80 Q100 60 150 80 T250 90 Q300 85 350 95 L350 120 Q300 110 250 115 T150 105 Q100 110 50 105 Z"
-                          fill="currentColor"
-                          className="text-blue-600 dark:text-blue-400"
-                        />
-                        <path
-                          d="M80 130 Q120 120 160 130 T240 140 L240 160 Q200 150 160 155 Q120 160 80 155 Z"
-                          fill="currentColor"
-                          className="text-blue-600 dark:text-blue-400"
-                        />
-                        <path
-                          d="M100 50 Q150 40 200 50 T300 60 Q350 55 380 65 L380 80 Q350 70 300 75 T200 65 Q150 70 100 65 Z"
-                          fill="currentColor"
-                          className="text-blue-600 dark:text-blue-400"
-                        />
-                      </svg>
-                    </div>
-
-                    {/* Location markers with varying sizes based on revenue */}
-                    {[
-                      { city: "New York", amount: "72K", x: 280, y: 120, size: 8 },
-                      { city: "San Francisco", amount: "39K", x: 50, y: 140, size: 6 },
-                      { city: "Sydney", amount: "25K", x: 350, y: 200, size: 5 },
-                      { city: "Singapore", amount: "61K", x: 320, y: 160, size: 7 },
-                    ].map((location) => (
-                      <div
-                        key={location.city}
-                        className="absolute transform -translate-x-1/2 -translate-y-1/2 group cursor-pointer"
-                        style={{
-                          left: `${(location.x / 400) * 100}%`,
-                          top: `${(location.y / 200) * 100}%`,
-                        }}
-                      >
-                        <div className="relative">
-                          <div 
-                            className="bg-gradient-to-r from-blue-500 to-blue-600 rounded-full animate-pulse group-hover:scale-125 transition-all duration-300 shadow-lg"
-                            style={{ width: `${location.size * 4}px`, height: `${location.size * 4}px` }}
-                          />
-                          <div className="absolute -top-10 left-1/2 transform -translate-x-1/2 bg-background/95 backdrop-blur-sm border border-border text-foreground text-xs px-3 py-2 rounded-lg opacity-0 group-hover:opacity-100 transition-all duration-200 whitespace-nowrap shadow-xl">
-                            <div className="font-semibold">{location.city}</div>
-                            <div className="text-muted-foreground">{location.amount}</div>
-                          </div>
-                        </div>
-                      </div>
-                    ))}
+            <CardContent className="p-4 sm:p-6 pt-0">
+              <div className="space-y-4 sm:space-y-6">
+                {/* World map with location markers */}
+                <div className="relative h-32 sm:h-48 bg-gradient-to-br from-blue-50 to-blue-100 dark:from-blue-950/20 dark:to-blue-900/20 rounded-lg overflow-hidden">
+                  {/* Simplified world map background */}
+                  <div className="absolute inset-0 opacity-20">
+                    <svg viewBox="0 0 400 200" className="w-full h-full">
+                      <path
+                        d="M50 80 Q100 60 150 80 T250 90 Q300 85 350 95 L350 120 Q300 110 250 115 T150 105 Q100 110 50 105 Z"
+                        fill="currentColor"
+                        className="text-blue-600 dark:text-blue-400"
+                      />
+                      <path
+                        d="M80 130 Q120 120 160 130 T240 140 L240 160 Q200 150 160 155 Q120 160 80 155 Z"
+                        fill="currentColor"
+                        className="text-blue-600 dark:text-blue-400"
+                      />
+                      <path
+                        d="M100 50 Q150 40 200 50 T300 60 Q350 55 380 65 L380 80 Q350 70 300 75 T200 65 Q150 70 100 65 Z"
+                        fill="currentColor"
+                        className="text-blue-600 dark:text-blue-400"
+                      />
+                    </svg>
                   </div>
 
-                  {/* Location data */}
-                  <StaggerContainer className="space-y-3" staggerDelay={0.05}>
-                    {[
-                      { city: "New York", amount: "72K", percentage: 35, color: "bg-blue-500" },
-                      { city: "San Francisco", amount: "39K", percentage: 19, color: "bg-green-500" },
-                      { city: "Sydney", amount: "25K", percentage: 12, color: "bg-purple-500" },
-                      { city: "Singapore", amount: "61K", percentage: 30, color: "bg-orange-500" },
-                    ].map((location) => (
-                      <StaggerItem key={location.city}>
-                        <div className="flex items-center justify-between p-3 rounded-lg hover:bg-muted/50 transition-all duration-200 cursor-pointer group">
-                          <div className="flex items-center gap-3">
-                            <div className={`w-3 h-3 rounded-full ${location.color} group-hover:scale-110 transition-transform duration-200`} />
-                            <MapPin className="h-4 w-4 text-muted-foreground group-hover:text-blue-500 transition-colors duration-200" />
-                            <span className="text-sm font-medium group-hover:text-foreground transition-colors duration-200">{location.city}</span>
-                          </div>
-                          <div className="flex items-center gap-3">
-                            <div className="w-16 bg-muted rounded-full h-2 overflow-hidden">
-                              <div 
-                                className={`h-full ${location.color} transition-all duration-500 group-hover:opacity-80`}
-                                style={{ width: `${location.percentage}%` }}
-                              />
-                            </div>
-                            <span className="font-semibold text-sm group-hover:text-primary transition-colors duration-200">{location.amount}</span>
-                          </div>
+                  {/* Location markers with varying sizes based on revenue */}
+                  {[
+                    { city: "New York", amount: "72K", x: 280, y: 120, size: 8 },
+                    { city: "San Francisco", amount: "39K", x: 50, y: 140, size: 6 },
+                    { city: "Sydney", amount: "25K", x: 350, y: 200, size: 5 },
+                    { city: "Singapore", amount: "61K", x: 320, y: 160, size: 7 },
+                  ].map((location) => (
+                    <div
+                      key={location.city}
+                      className="absolute transform -translate-x-1/2 -translate-y-1/2 group cursor-pointer"
+                      style={{
+                        left: `${(location.x / 400) * 100}%`,
+                        top: `${(location.y / 200) * 100}%`,
+                      }}
+                    >
+                      <div className="relative">
+                        <div 
+                          className="bg-gradient-to-r from-blue-500 to-blue-600 rounded-full animate-pulse group-hover:scale-125 transition-all duration-300 shadow-lg"
+                          style={{ width: `${location.size * 3}px`, height: `${location.size * 3}px` }}
+                        />
+                        <div className="absolute -top-10 left-1/2 transform -translate-x-1/2 bg-background/95 backdrop-blur-sm border border-border text-foreground text-xs px-3 py-2 rounded-lg opacity-0 group-hover:opacity-100 transition-all duration-200 whitespace-nowrap shadow-xl z-10">
+                          <div className="font-semibold">{location.city}</div>
+                          <div className="text-muted-foreground">{location.amount}</div>
                         </div>
-                      </StaggerItem>
-                    ))}
-                  </StaggerContainer>
+                      </div>
+                    </div>
+                  ))}
                 </div>
-              </CardContent>
-            </Card>
+
+                {/* Location data */}
+                <StaggerContainer className="space-y-2 sm:space-y-3" staggerDelay={0.05}>
+                  {[
+                    { city: "New York", amount: "72K", percentage: 35, color: "bg-blue-500" },
+                    { city: "San Francisco", amount: "39K", percentage: 19, color: "bg-green-500" },
+                    { city: "Sydney", amount: "25K", percentage: 12, color: "bg-purple-500" },
+                    { city: "Singapore", amount: "61K", percentage: 30, color: "bg-orange-500" },
+                  ].map((location) => (
+                    <StaggerItem key={location.city}>
+                      <div className="flex items-center justify-between p-2 sm:p-3 rounded-lg hover:bg-muted/50 transition-all duration-200 cursor-pointer group">
+                        <div className="flex items-center gap-2 sm:gap-3 min-w-0 flex-1">
+                          <div className={`w-2 h-2 sm:w-3 sm:h-3 rounded-full ${location.color} group-hover:scale-110 transition-transform duration-200 flex-shrink-0`} />
+                          <MapPin className="h-3 w-3 sm:h-4 sm:w-4 text-muted-foreground group-hover:text-blue-500 transition-colors duration-200 flex-shrink-0" />
+                          <span className="text-xs sm:text-sm font-medium group-hover:text-foreground transition-colors duration-200 truncate">{location.city}</span>
+                        </div>
+                        <div className="flex items-center gap-2 sm:gap-3 flex-shrink-0">
+                          <div className="w-8 sm:w-16 bg-muted rounded-full h-1 sm:h-2 overflow-hidden">
+                            <div 
+                              className={`h-full ${location.color} transition-all duration-500 group-hover:opacity-80`}
+                              style={{ width: `${location.percentage}%` }}
+                            />
+                          </div>
+                          <span className="font-semibold text-xs sm:text-sm group-hover:text-primary transition-colors duration-200">{location.amount}</span>
+                        </div>
+                      </div>
+                    </StaggerItem>
+                  ))}
+                </StaggerContainer>
+              </div>
+            </CardContent>
+          </Card>
         </div>
       </div>
 
       {/* Bottom section */}
-      <div className="grid gap-6 lg:grid-cols-2">
+      <div className="grid gap-4 sm:gap-6 grid-cols-1 lg:grid-cols-2">
         {/* Top Selling Products */}
-        <Card className="transition-all duration-300  bg-white border border-gray-200">
-          <CardHeader>
-            <CardTitle className="font-inter">Top Selling Products</CardTitle>
+        <Card className="transition-all duration-300 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow-sm w-full">
+          <CardHeader className="pb-2 sm:pb-6">
+            <CardTitle className="font-inter text-sm sm:text-base">Top Selling Products</CardTitle>
           </CardHeader>
-          <CardContent>
+          <CardContent className="p-4 sm:p-6 pt-0">
             <div className="space-y-4">
-              <div className="grid grid-cols-4 gap-4 text-xs font-medium text-muted-foreground pb-2 border-b font-inter">
+              {/* Desktop headers */}
+              <div className="hidden sm:grid grid-cols-4 gap-4 text-xs font-medium text-muted-foreground pb-2 border-b font-inter">
                 <span>Name</span>
                 <span>Price</span>
                 <span>Quantity</span>
@@ -345,7 +348,7 @@ export function EcommerceDashboard() {
               {isLoading ? (
                 <div className="space-y-2 animate-pulse">
                   {[...Array(itemsPerPage)].map((_, i) => (
-                    <div key={i} className="grid grid-cols-4 gap-4 py-2">
+                    <div key={i} className="space-y-2 sm:space-y-0 sm:grid sm:grid-cols-4 sm:gap-4 py-2">
                       <div className="h-4 bg-muted rounded animate-pulse"></div>
                       <div className="h-4 bg-muted rounded animate-pulse"></div>
                       <div className="h-4 bg-muted rounded animate-pulse"></div>
@@ -358,15 +361,25 @@ export function EcommerceDashboard() {
                   {currentProducts.map((product, i) => (
                     <div 
                       key={startIndex + i} 
-                      className="grid grid-cols-4 gap-4 text-sm py-2 hover:bg-muted/50 rounded-lg transition-all duration-200 cursor-pointer group animate-in fade-in-0 slide-in-from-left-4"
+                      className="space-y-2 sm:space-y-0 sm:grid sm:grid-cols-4 sm:gap-4 text-sm py-2 hover:bg-muted/50 rounded-lg transition-all duration-200 cursor-pointer group animate-in fade-in-0 slide-in-from-left-4 p-2 sm:p-0"
                       style={{ animationDelay: `${i * 50}ms` }}
                     >
-                      <div className="font-medium truncate group-hover:text-primary transition-colors duration-200 font-inter">
-                        {product.name}
+                      <div className="font-medium group-hover:text-primary transition-colors duration-200 font-inter">
+                        <span className="sm:hidden text-xs text-muted-foreground mr-2">Name:</span>
+                        <span className="truncate">{product.name}</span>
                       </div>
-                      <div className="text-muted-foreground font-inter">{product.price}</div>
-                      <div className="font-inter">{product.quantity}</div>
-                      <div className="font-semibold font-inter">{product.amount}</div>
+                      <div className="text-muted-foreground font-inter">
+                        <span className="sm:hidden text-xs text-muted-foreground mr-2">Price:</span>
+                        {product.price}
+                      </div>
+                      <div className="font-inter">
+                        <span className="sm:hidden text-xs text-muted-foreground mr-2">Qty:</span>
+                        {product.quantity}
+                      </div>
+                      <div className="font-semibold font-inter">
+                        <span className="sm:hidden text-xs text-muted-foreground mr-2">Amount:</span>
+                        {product.amount}
+                      </div>
                     </div>
                   ))}
                 </div>
@@ -397,21 +410,17 @@ export function EcommerceDashboard() {
         </Card>
 
         {/* Total Sales */}
-        <Card className="transition-all duration-300  cursor-pointer bg-white border border-gray-200">
-          <CardHeader>
-            <CardTitle className="font-inter">Total Sales</CardTitle>
+        <Card className="transition-all duration-300 cursor-pointer bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow-sm w-full">
+          <CardHeader className="pb-2 sm:pb-6">
+            <CardTitle className="font-inter text-sm sm:text-base">Total Sales</CardTitle>
           </CardHeader>
-          <CardContent>
-            <AdvancedDonutChart data={salesData} className="h-64" />
+          <CardContent className="p-4 sm:p-6 pt-0">
+            <div className="w-full overflow-x-auto">
+              <AdvancedDonutChart data={salesData} className="h-48 sm:h-64" />
+            </div>
           </CardContent>
         </Card>
       </div>
-
-      {/* Orders section on dashboard */}
-      <div className="mt-6">
-        <OrderList />
-      </div>
-
     </div>
   )
 }

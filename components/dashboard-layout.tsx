@@ -22,6 +22,7 @@ import {
   Share2,
   Menu,
   X,
+  List,
 } from "lucide-react"
 import Link from "next/link"
 
@@ -41,6 +42,7 @@ const dashboardItems = [
   { icon: FileText, label: "Order List", href: "/orders" },
   { icon: Folder, label: "Projects", href: "/projects" },
   { icon: BookOpen, label: "Online Courses", href: "/courses" },
+  { icon: List, label: "Order List", href: "/orders" },
 ]
 
 const pageItems = [
@@ -179,9 +181,9 @@ export function DashboardLayout({ children, currentPage = "eCommerce" }: Dashboa
       </aside>
 
       {/* Main content */}
-      <div className="lg:pl-64 lg:pr-80">
+      <div className="lg:pl-64">
         {/* Header */}
-        <header className="sticky top-0 z-30 flex h-16 items-center gap-4 border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 px-6 transition-all duration-300">
+        <header className="sticky top-0 z-30 flex h-16 items-center gap-4 border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 px-4 sm:px-6">
           <Button variant="ghost" size="sm" className="lg:hidden" onClick={() => setIsSidebarOpen(true)}>
             <Menu className="h-4 w-4" />
           </Button>
@@ -194,32 +196,32 @@ export function DashboardLayout({ children, currentPage = "eCommerce" }: Dashboa
           </div>
 
           {/* Search */}
-          <div className="ml-auto flex items-center gap-4">
-            <div className="relative hidden md:block">
+          <div className="ml-auto flex items-center gap-2 sm:gap-4">
+            <div className="relative hidden sm:block">
               <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
               <input
                 type="search"
                 placeholder="Search"
-                className="h-9 w-64 rounded-md border border-input bg-background pl-10 pr-4 text-sm placeholder:text-muted-foreground focus:border-ring focus:outline-none focus:ring-1 focus:ring-ring transition-all duration-200"
+                className="h-9 w-48 sm:w-64 rounded-md border border-input bg-background pl-10 pr-4 text-sm placeholder:text-muted-foreground focus:border-ring focus:outline-none focus:ring-1 focus:ring-ring"
               />
-              <kbd className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-muted-foreground">⌘K</kbd>
+              <kbd className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-muted-foreground hidden sm:block">⌘K</kbd>
             </div>
 
             <ThemeToggle />
 
             {/* Notifications */}
-            <Button variant="ghost" size="sm" className="relative transition-all duration-200 hover:scale-105">
+            <Button variant="ghost" size="sm" className="relative">
               <Bell className="h-4 w-4" />
-              <span className="absolute -top-1 -right-1 h-2 w-2 rounded-full bg-destructive animate-pulse"></span>
+              <span className="absolute -top-1 -right-1 h-2 w-2 rounded-full bg-destructive"></span>
             </Button>
 
             {/* Settings */}
-            <Button variant="ghost" size="sm" className="transition-all duration-200 hover:scale-105">
+            <Button variant="ghost" size="sm">
               <Settings className="h-4 w-4" />
             </Button>
 
             {/* Profile */}
-            <Avatar className="h-8 w-8 transition-all duration-200 hover:scale-105">
+            <Avatar className="h-8 w-8">
               <AvatarImage src="/diverse-user-avatars.png" />
               <AvatarFallback>U</AvatarFallback>
             </Avatar>
@@ -227,130 +229,8 @@ export function DashboardLayout({ children, currentPage = "eCommerce" }: Dashboa
         </header>
 
         {/* Page content */}
-        <main className="p-6 transition-all duration-300">{children}</main>
+        <main className="p-4 sm:p-6">{children}</main>
       </div>
-
-      {/* Right Sidebar */}
-      <aside className="fixed right-0 top-0 z-40 h-full w-80 bg-sidebar border-l border-sidebar-border transition-all duration-300 hidden xl:block">
-        <div className="flex h-full flex-col">
-          {/* Right sidebar header */}
-          <div className="flex h-16 items-center gap-2 px-6 border-b border-sidebar-border">
-            <span className="text-lg font-semibold text-sidebar-foreground">Activity</span>
-          </div>
-
-          {/* Right sidebar content */}
-          <div className="flex-1 overflow-y-auto p-4 space-y-6">
-            {/* Notifications */}
-            <div>
-              <h3 className="text-sm font-semibold text-sidebar-foreground mb-3 animate-in slide-in-from-right-4 duration-500">Notifications</h3>
-              <div className="space-y-3">
-                <div className="flex items-start gap-3 p-3 rounded-lg bg-card/50 hover:bg-card transition-all duration-300 hover:scale-105 hover:shadow-md group animate-in slide-in-from-right-4 duration-500 delay-100">
-                  <div className="h-2 w-2 rounded-full bg-destructive mt-2 animate-pulse group-hover:scale-125 transition-transform duration-300"></div>
-                  <div className="flex-1">
-                    <p className="text-sm group-hover:text-primary transition-colors duration-300">You have a bug that needs...</p>
-                    <p className="text-xs text-muted-foreground">Just now</p>
-                  </div>
-                </div>
-                <div className="flex items-start gap-3 p-3 rounded-lg bg-card/50 hover:bg-card transition-all duration-300 hover:scale-105 hover:shadow-md group animate-in slide-in-from-right-4 duration-500 delay-200">
-                  <div className="h-2 w-2 rounded-full bg-blue-500 mt-2 group-hover:scale-125 transition-transform duration-300"></div>
-                  <div className="flex-1">
-                    <p className="text-sm group-hover:text-primary transition-colors duration-300">New user registered</p>
-                    <p className="text-xs text-muted-foreground">59 minutes ago</p>
-                  </div>
-                </div>
-                <div className="flex items-start gap-3 p-3 rounded-lg bg-card/50 hover:bg-card transition-all duration-300 hover:scale-105 hover:shadow-md group animate-in slide-in-from-right-4 duration-500 delay-300">
-                  <div className="h-2 w-2 rounded-full bg-destructive mt-2 group-hover:scale-125 transition-transform duration-300"></div>
-                  <div className="flex-1">
-                    <p className="text-sm group-hover:text-primary transition-colors duration-300">You have a bug that needs...</p>
-                    <p className="text-xs text-muted-foreground">12 hours ago</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* Activities */}
-            <div>
-              <h3 className="text-sm font-semibold text-sidebar-foreground mb-3 animate-in slide-in-from-right-4 duration-500 delay-200">Recent Activities</h3>
-              <div className="space-y-3">
-                <div className="flex items-start gap-3 p-3 rounded-lg bg-card/50 hover:bg-card transition-all duration-300 hover:scale-105 hover:shadow-md group animate-in slide-in-from-right-4 duration-500 delay-300">
-                  <div className="p-1 rounded-full bg-red-100 dark:bg-red-950 group-hover:scale-110 transition-transform duration-300">
-                    <div className="w-4 h-4 rounded-full bg-white dark:bg-gray-800 flex items-center justify-center text-xs group-hover:animate-bounce">🐛</div>
-                  </div>
-                  <div className="flex-1">
-                    <p className="text-sm group-hover:text-primary transition-colors duration-300">You have a bug that needs...</p>
-                    <p className="text-xs text-muted-foreground">Just now</p>
-                  </div>
-                </div>
-                <div className="flex items-start gap-3 p-3 rounded-lg bg-card/50 hover:bg-card transition-all duration-300 hover:scale-105 hover:shadow-md group animate-in slide-in-from-right-4 duration-500 delay-400">
-                  <div className="p-1 rounded-full bg-green-100 dark:bg-green-950 group-hover:scale-110 transition-transform duration-300">
-                    <div className="w-4 h-4 rounded-full bg-white dark:bg-gray-800 flex items-center justify-center text-xs group-hover:animate-bounce">🚀</div>
-                  </div>
-                  <div className="flex-1">
-                    <p className="text-sm group-hover:text-primary transition-colors duration-300">Released a new version</p>
-                    <p className="text-xs text-muted-foreground">59 minutes ago</p>
-                  </div>
-                </div>
-                <div className="flex items-start gap-3 p-3 rounded-lg bg-card/50 hover:bg-card transition-all duration-300 hover:scale-105 hover:shadow-md group animate-in slide-in-from-right-4 duration-500 delay-500">
-                  <div className="p-1 rounded-full bg-blue-100 dark:bg-blue-950 group-hover:scale-110 transition-transform duration-300">
-                    <div className="w-4 h-4 rounded-full bg-white dark:bg-gray-800 flex items-center justify-center text-xs group-hover:animate-bounce">✏️</div>
-                  </div>
-                  <div className="flex-1">
-                    <p className="text-sm group-hover:text-primary transition-colors duration-300">Modified data in Page X</p>
-                    <p className="text-xs text-muted-foreground">Today, 11:59 AM</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* Contacts */}
-            <div>
-              <h3 className="text-sm font-semibold text-sidebar-foreground mb-3 animate-in slide-in-from-right-4 duration-500 delay-300">Contacts</h3>
-              <div className="space-y-3">
-                <div className="flex items-center gap-3 p-3 rounded-lg bg-card/50 hover:bg-card transition-all duration-300 hover:scale-105 hover:shadow-md group animate-in slide-in-from-right-4 duration-500 delay-400">
-                  <div className="relative group-hover:scale-110 transition-transform duration-300">
-                    <Avatar className="h-8 w-8">
-                      <AvatarImage src="/natali-craig.jpg" />
-                      <AvatarFallback>NC</AvatarFallback>
-                    </Avatar>
-                    <div className="absolute -bottom-0.5 -right-0.5 w-3 h-3 rounded-full border-2 border-background bg-green-500 group-hover:animate-pulse"></div>
-                  </div>
-                  <span className="text-sm font-medium group-hover:text-primary transition-colors duration-300">Natali Craig</span>
-                </div>
-                <div className="flex items-center gap-3 p-3 rounded-lg bg-card/50 hover:bg-card transition-all duration-300 hover:scale-105 hover:shadow-md group animate-in slide-in-from-right-4 duration-500 delay-500">
-                  <div className="relative group-hover:scale-110 transition-transform duration-300">
-                    <Avatar className="h-8 w-8">
-                      <AvatarImage src="/drew-cano.jpg" />
-                      <AvatarFallback>DC</AvatarFallback>
-                    </Avatar>
-                    <div className="absolute -bottom-0.5 -right-0.5 w-3 h-3 rounded-full border-2 border-background bg-yellow-500 group-hover:animate-pulse"></div>
-                  </div>
-                  <span className="text-sm font-medium group-hover:text-primary transition-colors duration-300">Drew Cano</span>
-                </div>
-                <div className="flex items-center gap-3 p-3 rounded-lg bg-card/50 hover:bg-card transition-all duration-300 hover:scale-105 hover:shadow-md group animate-in slide-in-from-right-4 duration-500 delay-600">
-                  <div className="relative group-hover:scale-110 transition-transform duration-300">
-                    <Avatar className="h-8 w-8">
-                      <AvatarImage src="/orlando-diggs.jpg" />
-                      <AvatarFallback>OD</AvatarFallback>
-                    </Avatar>
-                    <div className="absolute -bottom-0.5 -right-0.5 w-3 h-3 rounded-full border-2 border-background bg-green-500 group-hover:animate-pulse"></div>
-                  </div>
-                  <span className="text-sm font-medium group-hover:text-primary transition-colors duration-300">Orlando Diggs</span>
-                </div>
-                <div className="flex items-center gap-3 p-3 rounded-lg bg-card/50 hover:bg-card transition-all duration-300 hover:scale-105 hover:shadow-md group animate-in slide-in-from-right-4 duration-500 delay-700">
-                  <div className="relative group-hover:scale-110 transition-transform duration-300">
-                    <Avatar className="h-8 w-8">
-                      <AvatarImage src="/andi-lane.jpg" />
-                      <AvatarFallback>AL</AvatarFallback>
-                    </Avatar>
-                    <div className="absolute -bottom-0.5 -right-0.5 w-3 h-3 rounded-full border-2 border-background bg-gray-400 group-hover:animate-pulse"></div>
-                  </div>
-                  <span className="text-sm font-medium group-hover:text-primary transition-colors duration-300">Andi Lane</span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </aside>
     </div>
   )
 }
