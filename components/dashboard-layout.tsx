@@ -38,6 +38,7 @@ const sidebarItems = [
 const dashboardItems = [
   { icon: Home, label: "Default", href: "/dashboard" },
   { icon: ShoppingCart, label: "eCommerce", href: "/", active: true },
+  { icon: FileText, label: "Order List", href: "/orders" },
   { icon: Folder, label: "Projects", href: "/projects" },
   { icon: BookOpen, label: "Online Courses", href: "/courses" },
 ]
