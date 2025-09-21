@@ -104,12 +104,12 @@ export function EcommerceDashboard() {
 
   const handlePageChange = async (page: number) => {
     if (page < 1 || page > totalPages || page === currentPage) return
-    
+
     setIsLoading(true)
-    
+
     // Simulate 1-second loading
     await new Promise(resolve => setTimeout(resolve, 1000))
-    
+
     setCurrentPage(page)
     setIsLoading(false)
   }
@@ -129,7 +129,7 @@ export function EcommerceDashboard() {
             {metrics.map((metric, index) => (
               <Card key={metric.title} className="transition-all duration-300 cursor-pointer group h-full bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 min-h-[120px] sm:min-h-[140px] shadow-sm">
                 <CardContent className="p-4 sm:p-6 h-full flex flex-col justify-center">
-                  <div className="flex items-center justify-between">
+            <div className="flex items-center justify-between">
                     <div className="group-hover:scale-105 transition-transform duration-300 min-w-0 flex-1">
                       <p className="text-xs sm:text-sm font-medium text-muted-foreground group-hover:text-foreground transition-colors duration-300 font-inter truncate">{metric.title}</p>
                       <p className="text-lg sm:text-2xl font-bold mt-1 group-hover:text-primary transition-colors duration-300 font-inter truncate">{metric.value}</p>
@@ -218,7 +218,7 @@ export function EcommerceDashboard() {
                     <span className="font-semibold group-hover:text-primary transition-colors duration-300 font-inter">
                       {revenueTimeframe === 'monthly' ? '$68,768' : '$2,600K'}
                     </span>
-                  </div>
+              </div>
                 </div>
               </div>
             </CardHeader>
@@ -231,14 +231,14 @@ export function EcommerceDashboard() {
               </div>
             </CardContent>
           </Card>
-        </div>
+            </div>
 
         {/* Right column - Revenue by Location */}
         <div className="lg:col-span-1 w-full">
           <Card className="h-full transition-all duration-300 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow-sm">
             <CardHeader className="pb-2 sm:pb-6">
               <CardTitle className="text-sm sm:text-base font-inter">Revenue by Location</CardTitle>
-            </CardHeader>
+          </CardHeader>
             <CardContent className="p-4 sm:p-6 pt-0">
               <div className="space-y-4 sm:space-y-6">
                 {/* World map with location markers */}
@@ -380,16 +380,16 @@ export function EcommerceDashboard() {
                         <span className="sm:hidden text-xs text-muted-foreground mr-2">Amount:</span>
                         {product.amount}
                       </div>
-                    </div>
+                               </div>
                   ))}
-                </div>
+                                </div>
               )}
               
               {/* Pagination */}
               <div className="flex items-center justify-center gap-2 pt-4">
                 <button 
-                  onClick={() => handlePageChange(currentPage - 1)}
-                  disabled={currentPage === 1 || isLoading}
+                    onClick={() => handlePageChange(currentPage - 1)}
+                    disabled={currentPage === 1 || isLoading}
                   className="px-3 py-1 text-xs text-muted-foreground hover:text-foreground transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   &lt;
@@ -398,10 +398,10 @@ export function EcommerceDashboard() {
                   {currentPage}/{totalPages}
                 </span>
                 <button 
-                  onClick={() => handlePageChange(currentPage + 1)}
-                  disabled={currentPage === totalPages || isLoading}
+                    onClick={() => handlePageChange(currentPage + 1)}
+                    disabled={currentPage === totalPages || isLoading}
                   className="px-3 py-1 text-xs text-muted-foreground hover:text-foreground transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-                >
+                  >
                   &gt;
                 </button>
               </div>
@@ -415,7 +415,7 @@ export function EcommerceDashboard() {
             <CardTitle className="font-inter text-sm sm:text-base">Total Sales</CardTitle>
           </CardHeader>
           <CardContent className="p-4 sm:p-6 pt-0">
-            <div className="w-full overflow-x-auto">
+            <div className="w-full overflow-x-auto flex-1 overflow-auto no-scrollbar">
               <AdvancedDonutChart data={salesData} className="h-48 sm:h-64" />
             </div>
           </CardContent>

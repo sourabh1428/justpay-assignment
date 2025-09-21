@@ -544,9 +544,9 @@ export function OrderList() {
   return (
     <div className="w-full max-w-full p-4 sm:p-6 space-y-4 sm:space-y-6 overflow-x-hidden">
       {/* Page header */}
-      <div className="flex items-center justify-between">
+        <div className="flex items-center justify-between">
         <h1 className="text-xl sm:text-2xl font-semibold text-foreground tracking-tight">Order List</h1>
-      </div>
+        </div>
 
       {/* Orders table */}
       <Card className="w-full shadow-sm border bg-card">
@@ -554,31 +554,31 @@ export function OrderList() {
           <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
             <div className="flex items-center gap-2 sm:gap-3 flex-wrap w-full sm:w-auto">
               <Button size="sm" className="gap-2 text-xs sm:text-sm">
-                <Plus className="h-4 w-4" />
-                Add Order
-              </Button>
+                    <Plus className="h-4 w-4" />
+                    Add Order
+                  </Button>
               <Button variant="outline" size="sm" className="gap-2 text-xs sm:text-sm">
-                <Filter className="h-4 w-4" />
-                Filter
-              </Button>
+                    <Filter className="h-4 w-4" />
+                    Filter
+                  </Button>
               <Button variant="outline" size="sm" className="gap-2 text-xs sm:text-sm">
-                <ArrowUpDown className="h-4 w-4" />
-                Sort
-              </Button>
-            </div>
+                    <ArrowUpDown className="h-4 w-4" />
+                    Sort
+                  </Button>
+              </div>
             <div className="relative w-full sm:w-64">
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-              <input
-                type="search"
-                placeholder="Search"
+                <input
+                  type="search"
+                  placeholder="Search"
                 value={searchTerm}
                 onChange={(e) => handleSearch(e.target.value)}
                 className="h-9 w-full pl-9 pr-3 rounded-md border border-input bg-background text-sm placeholder:text-muted-foreground focus:border-ring focus:outline-none focus:ring-1 focus:ring-ring"
-              />
+                />
+              </div>
             </div>
-          </div>
-        </CardHeader>
-        <CardContent className="p-0">
+          </CardHeader>
+          <CardContent className="p-0">
           {/* Mobile card view - visible on mobile only */}
           <div className="block sm:hidden">
             <div className="space-y-3 p-4">
@@ -604,7 +604,7 @@ export function OrderList() {
                     <div key={`${order.id}-mobile-${index}`} className="p-4 border rounded-lg hover:bg-muted/50 transition-colors">
                       <div className="flex items-center justify-between mb-3">
                         <div className="flex items-center gap-2">
-                          <Checkbox
+                      <Checkbox
                             checked={selectedOrders.includes(order.id)}
                             onCheckedChange={(checked) => handleSelectOrder(order.id, checked as boolean)}
                           />
@@ -664,13 +664,13 @@ export function OrderList() {
                       <div className="flex justify-end mt-3">
                         <DropdownMenu>
                           <DropdownMenuTrigger asChild>
-                            <Button
-                              variant="ghost"
-                              size="sm"
+                      <Button
+                        variant="ghost"
+                        size="sm"
                               className="h-8 w-8 p-0"
-                            >
+                      >
                               <MoreHorizontal className="h-4 w-4" />
-                            </Button>
+                      </Button>
                           </DropdownMenuTrigger>
                           <DropdownMenuContent align="end" className="w-48">
                             <DropdownMenuItem>View Details</DropdownMenuItem>
@@ -701,41 +701,41 @@ export function OrderList() {
                       <span>Order ID</span>
                       <ArrowUpDown className="h-3 w-3" />
                     </div>
-                  </th>
+                    </th>
                   <th className="text-left px-4 py-4 font-medium text-muted-foreground text-sm cursor-pointer hover:text-foreground">
                     <div className="flex items-center gap-2" onClick={() => handleSort("user")}>
                       <span>User</span>
                       <ArrowUpDown className="h-3 w-3" />
                     </div>
-                  </th>
+                    </th>
                   <th className="text-left px-4 py-4 font-medium text-muted-foreground text-sm cursor-pointer hover:text-foreground">
                     <div className="flex items-center gap-2" onClick={() => handleSort("project")}>
                       <span>Project</span>
                       <ArrowUpDown className="h-3 w-3" />
                     </div>
-                  </th>
+                    </th>
                   <th className="text-left px-4 py-4 font-medium text-muted-foreground text-sm cursor-pointer hover:text-foreground">
                     <div className="flex items-center gap-2" onClick={() => handleSort("address")}>
                       <span>Address</span>
                       <ArrowUpDown className="h-3 w-3" />
                     </div>
-                  </th>
+                    </th>
                   <th className="text-left px-4 py-4 font-medium text-muted-foreground text-sm cursor-pointer hover:text-foreground">
                     <div className="flex items-center gap-2" onClick={() => handleSort("date")}>
                       <span>Date</span>
                       <ArrowUpDown className="h-3 w-3" />
                     </div>
-                  </th>
+                    </th>
                   <th className="text-left px-4 py-4 font-medium text-muted-foreground text-sm cursor-pointer hover:text-foreground">
                     <div className="flex items-center gap-2" onClick={() => handleSort("status")}>
                       <span>Status</span>
                       <ArrowUpDown className="h-3 w-3" />
                     </div>
-                  </th>
+                    </th>
                   <th className="text-center px-4 py-4 w-12"></th>
-                </tr>
-              </thead>
-              <tbody>
+                  </tr>
+                </thead>
+                <tbody>
                 {isLoading
                   ? // Loading state
                     [...Array(itemsPerPage)].map((_, i) => (
@@ -772,122 +772,122 @@ export function OrderList() {
                   : currentOrders.map((order, index) => (
                       <tr key={`${order.id}-${index}`} className="border-b hover:bg-muted/50 group">
                         <td className="px-4 py-4">
-                          <Checkbox
-                            checked={selectedOrders.includes(order.id)}
-                            onCheckedChange={(checked) => handleSelectOrder(order.id, checked as boolean)}
-                          />
-                        </td>
+                            <Checkbox
+                              checked={selectedOrders.includes(order.id)}
+                              onCheckedChange={(checked) => handleSelectOrder(order.id, checked as boolean)}
+                            />
+                          </td>
                         <td className="px-4 py-4">
                           <span className="font-medium text-foreground text-sm">
-                            {order.id}
-                          </span>
-                        </td>
-                        <td className="px-4 py-4">
-                          <div className="flex items-center gap-3">
-                            <Avatar className="h-8 w-8">
-                              <AvatarImage src={order.user.avatar || "/placeholder.svg"} />
-                              <AvatarFallback className="text-xs font-medium">
-                                {order.user.name
-                                  .split(" ")
-                                  .map((n) => n[0])
-                                  .join("")}
-                              </AvatarFallback>
-                            </Avatar>
-                            <span className="font-medium text-foreground text-sm">
-                              {order.user.name}
+                              {order.id}
                             </span>
-                          </div>
-                        </td>
+                          </td>
+                        <td className="px-4 py-4">
+                            <div className="flex items-center gap-3">
+                            <Avatar className="h-8 w-8">
+                                <AvatarImage src={order.user.avatar || "/placeholder.svg"} />
+                              <AvatarFallback className="text-xs font-medium">
+                                  {order.user.name
+                                    .split(" ")
+                                    .map((n) => n[0])
+                                    .join("")}
+                                </AvatarFallback>
+                              </Avatar>
+                            <span className="font-medium text-foreground text-sm">
+                                {order.user.name}
+                              </span>
+                            </div>
+                          </td>
                         <td className="px-4 py-4">
                           <span className="text-foreground text-sm">
-                            {order.project}
-                          </span>
-                        </td>
+                              {order.project}
+                            </span>
+                          </td>
                         <td className="px-4 py-4">
                           <div className="flex items-center gap-2 text-muted-foreground">
                             <MapPin className="h-3 w-3 flex-shrink-0" />
                             <span className="text-sm">{order.address}</span>
-                          </div>
-                        </td>
+                            </div>
+                          </td>
                         <td className="px-4 py-4">
                           <div className="flex items-center gap-2 text-muted-foreground">
                             <Calendar className="h-3 w-3 flex-shrink-0" />
                             <span className="text-sm">{order.date}</span>
-                          </div>
-                        </td>
-                        <td className="px-4 py-4">
-                          <Badge
-                            variant="secondary"
-                            className={cn(
-                              "text-xs px-3 py-1 font-medium",
-                              getStatusColor(order.status),
-                            )}
-                          >
-                            <div className="flex items-center gap-2">
-                              <div
-                                className={cn(
-                                  "w-2 h-2 rounded-full",
-                                  order.status === "In Progress" && "bg-blue-500",
-                                  order.status === "Complete" && "bg-green-500",
-                                  order.status === "Pending" && "bg-yellow-500",
-                                  order.status === "Approved" && "bg-emerald-500",
-                                  order.status === "Rejected" && "bg-red-500",
-                                )}
-                              />
-                              {order.status}
                             </div>
-                          </Badge>
-                        </td>
+                          </td>
+                        <td className="px-4 py-4">
+                            <Badge
+                              variant="secondary"
+                              className={cn(
+                              "text-xs px-3 py-1 font-medium",
+                                getStatusColor(order.status),
+                              )}
+                            >
+                            <div className="flex items-center gap-2">
+                                <div
+                                  className={cn(
+                                    "w-2 h-2 rounded-full",
+                                  order.status === "In Progress" && "bg-blue-500",
+                                    order.status === "Complete" && "bg-green-500",
+                                  order.status === "Pending" && "bg-yellow-500",
+                                    order.status === "Approved" && "bg-emerald-500",
+                                    order.status === "Rejected" && "bg-red-500",
+                                  )}
+                                />
+                                {order.status}
+                              </div>
+                            </Badge>
+                          </td>
                         <td className="px-4 py-4 text-center">
-                          <DropdownMenu>
-                            <DropdownMenuTrigger asChild>
-                              <Button
-                                variant="ghost"
-                                size="sm"
+                            <DropdownMenu>
+                              <DropdownMenuTrigger asChild>
+                                <Button
+                                  variant="ghost"
+                                  size="sm"
                                 className="h-8 w-8 p-0 opacity-0 group-hover:opacity-100 transition-opacity"
-                              >
-                                <MoreHorizontal className="h-4 w-4" />
-                              </Button>
-                            </DropdownMenuTrigger>
-                            <DropdownMenuContent align="end" className="w-48">
+                                >
+                                  <MoreHorizontal className="h-4 w-4" />
+                                </Button>
+                              </DropdownMenuTrigger>
+                              <DropdownMenuContent align="end" className="w-48">
                               <DropdownMenuItem>
-                                View Details
-                              </DropdownMenuItem>
+                                  View Details
+                                </DropdownMenuItem>
                               <DropdownMenuItem>
-                                Edit Order
-                              </DropdownMenuItem>
+                                  Edit Order
+                                </DropdownMenuItem>
                               <DropdownMenuItem>
-                                Duplicate
-                              </DropdownMenuItem>
+                                  Duplicate
+                                </DropdownMenuItem>
                               <DropdownMenuItem className="text-red-600">
-                                Delete
-                              </DropdownMenuItem>
-                            </DropdownMenuContent>
-                          </DropdownMenu>
-                        </td>
-                      </tr>
+                                  Delete
+                                </DropdownMenuItem>
+                              </DropdownMenuContent>
+                            </DropdownMenu>
+                          </td>
+                        </tr>
                     ))}
-              </tbody>
-            </table>
-          </div>
+                </tbody>
+              </table>
+            </div>
 
-          {/* Pagination */}
+            {/* Pagination */}
           <div className="flex flex-col sm:flex-row items-center justify-between p-4 sm:p-6 border-t gap-4">
             <div className="text-xs sm:text-sm text-muted-foreground">
               Showing <span className="font-medium text-foreground">{startIndex + 1}</span> to{" "}
               <span className="font-medium text-foreground">{Math.min(endIndex, filteredOrders.length)}</span> of{" "}
               <span className="font-medium text-foreground">{filteredOrders.length}</span> entries
-            </div>
+              </div>
             <div className="flex items-center gap-1 sm:gap-2 flex-wrap justify-center">
-              <Button
-                variant="outline"
-                size="sm"
+                  <Button
+                    variant="outline"
+                    size="sm"
                 onClick={() => handlePageChange(currentPage - 1)}
                 disabled={currentPage === 1 || isLoading}
                 className="text-xs sm:text-sm"
-              >
-                Previous
-              </Button>
+                  >
+                    Previous
+                  </Button>
               {Array.from({ length: Math.min(totalPages, 5) }, (_, i) => {
                 let page;
                 if (totalPages <= 5) {
@@ -900,34 +900,34 @@ export function OrderList() {
                   page = currentPage - 2 + i;
                 }
                 return (
-                  <Button
+                    <Button
                     key={page}
-                    variant={currentPage === page ? "default" : "outline"}
-                    size="sm"
+                      variant={currentPage === page ? "default" : "outline"}
+                      size="sm"
                     onClick={() => handlePageChange(page)}
                     disabled={isLoading}
                     className={cn(
                       "w-8 h-8 p-0 text-xs sm:text-sm",
                       currentPage === page && "bg-primary text-primary-foreground",
                     )}
-                  >
-                    {page}
-                  </Button>
+                    >
+                      {page}
+                    </Button>
                 );
               })}
-              <Button
-                variant="outline"
-                size="sm"
+                  <Button
+                    variant="outline"
+                    size="sm"
                 onClick={() => handlePageChange(currentPage + 1)}
                 disabled={currentPage === totalPages || isLoading}
                 className="text-xs sm:text-sm"
-              >
-                Next
-              </Button>
+                  >
+                    Next
+                  </Button>
+              </div>
             </div>
-          </div>
-        </CardContent>
-      </Card>
+          </CardContent>
+        </Card>
     </div>
   )
 }
