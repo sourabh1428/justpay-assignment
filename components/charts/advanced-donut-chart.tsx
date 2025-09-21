@@ -16,9 +16,17 @@ const CustomTooltip = ({ active, payload }: any) => {
   if (active && payload && payload.length) {
     const data = payload[0].payload
     return (
-      <div className="bg-background border border-border rounded-lg p-3 shadow-lg">
-        <p className="font-medium text-foreground">{data.name}</p>
-        <p className="text-sm text-muted-foreground">${data.value.toFixed(2)}</p>
+      <div className="bg-background/95 backdrop-blur-sm border border-border rounded-lg p-3 shadow-xl animate-in fade-in-0 zoom-in-95 duration-200">
+        <div className="flex items-center gap-2 mb-2">
+          <div 
+            className="w-3 h-3 rounded-full" 
+            style={{ backgroundColor: data.color }}
+          />
+          <p className="font-medium text-foreground">{data.name}</p>
+        </div>
+        <p className="text-sm text-muted-foreground">
+          Value: <span className="font-semibold text-foreground">${data.value.toFixed(2)}</span>
+        </p>
       </div>
     )
   }
@@ -54,47 +62,62 @@ export function AdvancedDonutChart({ data, className }: AdvancedDonutChartProps)
     <div className={cn("w-full h-80", className)}>
       <ResponsiveContainer width="100%" height="100%">
         <PieChart>
-          <Pie
-            data={data}
-            cx="50%"
-            cy="50%"
-            labelLine={false}
-            label={CustomLabel}
-            outerRadius={80}
-            innerRadius={40}
-            fill="#8884d8"
-            dataKey="value"
-            className="transition-all duration-300"
-          >
-            {data.map((entry, index) => (
-              <Cell
-                key={`cell-${index}`}
-                fill={entry.color}
-                className="hover:opacity-80 transition-opacity duration-200"
-              />
-            ))}
-          </Pie>
+              <Pie
+                data={data}
+                cx="50%"
+                cy="50%"
+                labelLine={false}
+                label={(entry) => {
+                  if (entry.name === "Affiliate") {
+                    return (
+                      <text
+                        x={entry.cx}
+                        y={entry.cy}
+                        textAnchor="middle"
+                        dominantBaseline="middle"
+                        className="text-xs font-medium fill-white"
+                      >
+                        38.6%
+                      </text>
+                    )
+                  }
+                  return null
+                }}
+                outerRadius={90}
+                innerRadius={50}
+                fill="#8884d8"
+                dataKey="value"
+                className="transition-all duration-300"
+              >
+                {data.map((entry, index) => (
+                  <Cell
+                    key={`cell-${index}`}
+                    fill={entry.color}
+                    className="hover:opacity-80 transition-opacity duration-200"
+                  />
+                ))}
+              </Pie>
           <Tooltip content={<CustomTooltip />} />
           <Legend
             verticalAlign="bottom"
             height={36}
             formatter={(value, entry: any) => (
-              <span className="text-sm text-muted-foreground flex items-center gap-2">
+              <span className="text-sm text-muted-foreground flex items-center gap-2 transition-colors duration-300">
                 <span className="w-3 h-3 rounded-full" style={{ backgroundColor: entry.color }} />
                 {value}
               </span>
             )}
           />
-          {/* Center text */}
-          <text
-            x="50%"
-            y="50%"
-            textAnchor="middle"
-            dominantBaseline="middle"
-            className="text-lg font-bold fill-foreground"
-          >
-            {Math.round((data[0]?.value / total) * 100) || 0}%
-          </text>
+              {/* Center text */}
+              <text
+                x="50%"
+                y="50%"
+                textAnchor="middle"
+                dominantBaseline="middle"
+                className="text-lg font-bold fill-foreground transition-colors duration-300"
+              >
+                {Math.round((data.find(item => item.name === "Affiliate")?.value / total) * 100) || 0}%
+              </text>
         </PieChart>
       </ResponsiveContainer>
     </div>

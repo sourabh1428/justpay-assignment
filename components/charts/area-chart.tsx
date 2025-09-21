@@ -23,9 +23,17 @@ interface AreaChartProps {
 const CustomTooltip = ({ active, payload, label }: any) => {
   if (active && payload && payload.length) {
     return (
-      <div className="bg-background border border-border rounded-lg p-3 shadow-lg">
-        <p className="font-medium text-foreground">{label}</p>
-        <p className="text-sm text-muted-foreground">Value: {payload[0].value}</p>
+      <div className="bg-background/95 backdrop-blur-sm border border-border rounded-lg p-3 shadow-xl animate-in fade-in-0 zoom-in-95 duration-200">
+        <p className="font-medium text-foreground mb-2">{label}</p>
+        <div className="flex items-center gap-2">
+          <div 
+            className="w-3 h-3 rounded-full" 
+            style={{ backgroundColor: payload[0].color }}
+          />
+          <p className="text-sm text-muted-foreground">
+            Value: <span className="font-semibold text-foreground">{payload[0].value}</span>
+          </p>
+        </div>
       </div>
     )
   }
@@ -43,14 +51,24 @@ export const AreaChart = ({ data, className, color = "hsl(var(--chart-1))" }: Ar
               <stop offset="95%" stopColor={color} stopOpacity={0.05} />
             </linearGradient>
           </defs>
-          <CartesianGrid strokeDasharray="3 3" className="opacity-30" />
+          <CartesianGrid 
+            strokeDasharray="3 3" 
+            stroke="hsl(var(--muted-foreground))" 
+            className="opacity-20" 
+          />
           <XAxis
             dataKey="name"
             axisLine={false}
             tickLine={false}
             tick={{ fontSize: 12, fill: "hsl(var(--muted-foreground))" }}
+            className="transition-colors duration-300"
           />
-          <YAxis axisLine={false} tickLine={false} tick={{ fontSize: 12, fill: "hsl(var(--muted-foreground))" }} />
+          <YAxis 
+            axisLine={false} 
+            tickLine={false} 
+            tick={{ fontSize: 12, fill: "hsl(var(--muted-foreground))" }}
+            className="transition-colors duration-300"
+          />
           <Tooltip content={<CustomTooltip />} />
           <Area
             type="monotone"

@@ -1,11 +1,13 @@
 "use client"
 
+import { useState } from "react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { TrendingUp, TrendingDown, MapPin } from "lucide-react"
 import { cn } from "@/lib/utils"
-import { AdvancedBarChart } from "@/components/charts/advanced-bar-chart"
+import { ProjectionsLineChart } from "@/components/charts/projections-line-chart"
 import { AdvancedLineChart } from "@/components/charts/advanced-line-chart"
+import { AdvancedBarChart } from "@/components/charts/advanced-bar-chart"
 import { AdvancedDonutChart } from "@/components/charts/advanced-donut-chart"
 import { AreaChart } from "@/components/charts/area-chart"
 import { FadeIn } from "@/components/animations/fade-in"
@@ -19,54 +21,58 @@ const metrics = [
     value: "3,781",
     change: "+11.01%",
     trend: "up",
-    color: "bg-blue-50 dark:bg-blue-950/50",
   },
   {
     title: "Orders",
     value: "1,219",
     change: "-0.03%",
     trend: "down",
-    color: "bg-background",
   },
   {
     title: "Revenue",
     value: "$695",
     change: "+15.03%",
     trend: "up",
-    color: "bg-background",
   },
   {
     title: "Growth",
     value: "30.1%",
     change: "+6.08%",
     trend: "up",
-    color: "bg-background",
   },
 ]
 
 const projectionsData = [
-  { name: "Jan", actual: 20, projected: 25 },
-  { name: "Feb", actual: 25, projected: 30 },
-  { name: "Mar", actual: 22, projected: 28 },
-  { name: "Apr", actual: 30, projected: 35 },
-  { name: "May", actual: 28, projected: 32 },
-  { name: "Jun", actual: 35, projected: 38 },
+  { name: "Jan", actual: 25, projected: 20 },
+  { name: "Feb", actual: 30, projected: 25 },
+  { name: "Mar", actual: 28, projected: 22 },
+  { name: "Apr", actual: 35, projected: 30 },
+  { name: "May", actual: 32, projected: 28 },
+  { name: "Jun", actual: 38, projected: 35 },
 ]
 
-const revenueData = [
-  { name: "Jan", current: 15000, previous: 12000 },
-  { name: "Feb", current: 18000, previous: 15000 },
-  { name: "Mar", current: 16000, previous: 17000 },
-  { name: "Apr", current: 22000, previous: 19000 },
-  { name: "May", current: 20000, previous: 21000 },
+const monthlyRevenueData = [
+  { name: "Jan", current: 16000, previous: 15000 },
+  { name: "Feb", current: 18000, previous: 16000 },
+  { name: "Mar", current: 17000, previous: 18000 },
+  { name: "Apr", current: 20000, previous: 19000 },
+  { name: "May", current: 21000, previous: 22000 },
   { name: "Jun", current: 25000, previous: 23000 },
 ]
 
+const yearlyRevenueData = [
+  { name: "2020", current: 180000, previous: 165000 },
+  { name: "2021", current: 220000, previous: 200000 },
+  { name: "2022", current: 195000, previous: 210000 },
+  { name: "2023", current: 250000, previous: 235000 },
+  { name: "2024", current: 280000, previous: 260000 },
+]
+
 const salesData = [
-  { name: "Direct", value: 300.56, color: "#1e293b" },
-  { name: "Affiliate", value: 135.18, color: "#3b82f6" },
-  { name: "Sponsored", value: 154.02, color: "#10b981" },
-  { name: "E-mail", value: 48.96, color: "#f59e0b" },
+  { name: "Direct", value: 300.56, color: "#000000" },
+  { name: "Affiliate", value: 135.18, color: "#10b981" },
+  { name: "Sponsored", value: 154.02, color: "#8b5cf6" },
+  { name: "E-mail", value: 48.96, color: "#3b82f6" },
 ]
 
 const growthData = [
@@ -84,144 +90,153 @@ const topProducts = [
   { name: "Marco Shoes", price: "$79.49", quantity: 64, amount: "$1,965.81" },
 ]
 
-const activities = [
-  {
-    user: "You have a bug that needs...",
-    time: "Just now",
-    avatar: "/bug-icon.jpg",
-    type: "bug",
-    color: "bg-red-100 dark:bg-red-950",
-  },
-  {
-    user: "Released a new version",
-    time: "59 minutes ago",
-    avatar: "/release-icon.jpg",
-    type: "release",
-    color: "bg-green-100 dark:bg-green-950",
-  },
-  {
-    user: "Submitted a bug",
-    time: "12 hours ago",
-    avatar: "/diverse-user-avatars.png",
-    type: "bug",
-    color: "bg-red-100 dark:bg-red-950",
-  },
-  {
-    user: "Modified a data in Page X",
-    time: "Today, 11:59 AM",
-    avatar: "/diverse-user-avatars.png",
-    type: "edit",
-    color: "bg-blue-100 dark:bg-blue-950",
-  },
-  {
-    user: "Deleted a page in Project X",
-    time: "Feb 2, 2023",
-    avatar: "/diverse-user-avatars.png",
-    type: "delete",
-    color: "bg-orange-100 dark:bg-orange-950",
-  },
-]
-
-const contacts = [
-  { name: "Natali Craig", avatar: "/natali-craig.jpg", status: "online" },
-  { name: "Drew Cano", avatar: "/drew-cano.jpg", status: "away" },
-  { name: "Orlando Diggs", avatar: "/orlando-diggs.jpg", status: "online" },
-  { name: "Andi Lane", avatar: "/andi-lane.jpg", status: "offline" },
-  { name: "Kate Morrison", avatar: "/kate-morrison.jpg", status: "online" },
-  { name: "Koray Okumus", avatar: "/koray-okumus.jpg", status: "away" },
-]
 
 export function EcommerceDashboard() {
+  const [currentPage, setCurrentPage] = useState(1)
+  const [isLoading, setIsLoading] = useState(false)
+  const [revenueTimeframe, setRevenueTimeframe] = useState<'monthly' | 'yearly'>('monthly')
+  const itemsPerPage = 4
+
+  // Pagination logic
+  const totalPages = Math.ceil(topProducts.length / itemsPerPage)
+  const startIndex = (currentPage - 1) * itemsPerPage
+  const endIndex = startIndex + itemsPerPage
+  const currentProducts = topProducts.slice(startIndex, endIndex)
+
+  const handlePageChange = async (page: number) => {
+    if (page < 1 || page > totalPages || page === currentPage) return
+    
+    setIsLoading(true)
+    
+    // Simulate 1-second loading
+    await new Promise(resolve => setTimeout(resolve, 1000))
+    
+    setCurrentPage(page)
+    setIsLoading(false)
+  }
+
   return (
     <div className="space-y-6">
       {/* Page title */}
       <FadeIn>
-        <h1 className="text-2xl font-semibold text-foreground">eCommerce</h1>
+        <h1 className="text-2xl font-semibold text-foreground font-inter">eCommerce</h1>
       </FadeIn>
 
-      {/* Metrics cards */}
-      <StaggerContainer className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
-        {metrics.map((metric, index) => (
-          <StaggerItem key={metric.title}>
-            <ScaleOnHover>
-              <Card className={cn("transition-all duration-300 hover:shadow-lg cursor-pointer", metric.color)}>
-                <CardContent className="p-6">
+      {/* Top section - Metrics and Projections */}
+      <div className="grid gap-6 lg:grid-cols-2 mb-6">
+        {/* Metrics cards - 2x2 grid */}
+        <div className="lg:col-span-1">
+          <div className="grid gap-4 grid-cols-2 h-full">
+            {metrics.map((metric, index) => (
+              <Card key={metric.title} className="transition-all duration-300  cursor-pointer group h-full bg-white border border-gray-200">
+                <CardContent className="p-6 h-full flex flex-col justify-center">
                   <div className="flex items-center justify-between">
-                    <div>
-                      <p className="text-sm font-medium text-muted-foreground">{metric.title}</p>
-                      <p className="text-2xl font-bold mt-1">{metric.value}</p>
+                    <div className="group-hover:scale-105 transition-transform duration-300">
+                      <p className="text-sm font-medium text-muted-foreground group-hover:text-foreground transition-colors duration-300 font-inter">{metric.title}</p>
+                      <p className="text-2xl font-bold mt-1 group-hover:text-primary transition-colors duration-300 font-inter">{metric.value}</p>
                     </div>
                     <div
                       className={cn(
-                        "flex items-center gap-1 text-sm font-medium px-2 py-1 rounded-full transition-all duration-200",
+                        "flex items-center gap-1 text-sm font-medium px-2 py-1 rounded-full transition-all duration-300 group-hover:scale-110 font-inter",
                         metric.trend === "up"
-                          ? "text-green-700 bg-green-100 dark:text-green-400 dark:bg-green-950"
-                          : "text-red-700 bg-red-100 dark:text-red-400 dark:bg-red-950",
+                          ? "text-green-700 bg-green-100 dark:text-green-400 dark:bg-green-950 group-hover:bg-green-200 dark:group-hover:bg-green-900"
+                          : "text-red-700 bg-red-100 dark:text-red-400 dark:bg-red-950 group-hover:bg-red-200 dark:group-hover:bg-red-900",
                       )}
                     >
                       {metric.trend === "up" ? (
-                        <TrendingUp className="h-3 w-3" />
+                        <TrendingUp className="h-3 w-3 animate-pulse" />
                       ) : (
-                        <TrendingDown className="h-3 w-3" />
+                        <TrendingDown className="h-3 w-3 animate-pulse" />
                       )}
                       {metric.change}
                     </div>
                   </div>
                 </CardContent>
               </Card>
-            </ScaleOnHover>
-          </StaggerItem>
-        ))}
-      </StaggerContainer>
+            ))}
+          </div>
+        </div>
 
-      <div className="grid gap-6 lg:grid-cols-3">
-        {/* Left column - Charts */}
-        <div className="lg:col-span-2 space-y-6">
-          {/* Projections vs Actuals Chart */}
-          <SlideIn direction="left" delay={0.2}>
-            <Card className="transition-all duration-300 hover:shadow-lg">
-              <CardHeader>
-                <CardTitle>Projections vs Actuals</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <AdvancedBarChart data={projectionsData} />
-              </CardContent>
-            </Card>
-          </SlideIn>
+        {/* Projections vs Actuals Chart - Right side */}
+        <div className="lg:col-span-1">
+          <Card className="transition-all duration-300  group h-full bg-white border border-gray-200">
+            <CardHeader className="group-hover:bg-muted/30 transition-colors duration-300">
+              <CardTitle className="group-hover:text-primary transition-colors duration-300 text-sm font-inter">Projections vs Actuals</CardTitle>
+            </CardHeader>
+            <CardContent className="flex-1">
+              <AdvancedBarChart data={projectionsData} />
+            </CardContent>
+          </Card>
+        </div>
+      </div>
 
-          {/* Revenue Chart */}
-          <SlideIn direction="left" delay={0.4}>
-            <Card className="transition-all duration-300 hover:shadow-lg">
-              <CardHeader className="flex flex-row items-center justify-between">
-                <CardTitle>Revenue</CardTitle>
+      {/* Middle section - Revenue Chart */}
+      <div className="grid gap-6 lg:grid-cols-3 mb-6">
+        {/* Revenue Chart - Large Middle Chart */}
+        <div className="lg:col-span-2">
+          <Card className="transition-all duration-300  group h-full bg-white border border-gray-200">
+            <CardHeader className="flex flex-row items-center justify-between group-hover:bg-muted/30 transition-colors duration-300">
+              <CardTitle className="group-hover:text-primary transition-colors duration-300 font-inter">Revenue</CardTitle>
+              
+              {/* Timeframe Toggle */}
+              <div className="flex items-center gap-4">
+                <div className="flex bg-muted rounded-lg p-1">
+                  <button
+                    onClick={() => setRevenueTimeframe('monthly')}
+                    className={`px-3 py-1 text-xs font-medium rounded-md transition-all duration-200 ${
+                      revenueTimeframe === 'monthly'
+                        ? 'bg-background text-foreground shadow-sm'
+                        : 'text-muted-foreground hover:text-foreground'
+                    }`}
+                  >
+                    Monthly
+                  </button>
+                  <button
+                    onClick={() => setRevenueTimeframe('yearly')}
+                    className={`px-3 py-1 text-xs font-medium rounded-md transition-all duration-200 ${
+                      revenueTimeframe === 'yearly'
+                        ? 'bg-background text-foreground shadow-sm'
+                        : 'text-muted-foreground hover:text-foreground'
+                    }`}
+                  >
+                    Yearly
+                  </button>
+                </div>
+                
                 <div className="flex items-center gap-6 text-sm">
-                  <div className="flex items-center gap-2">
-                    <div className="w-3 h-3 bg-chart-1 rounded-full" />
-                    <span className="text-muted-foreground">Current Week</span>
-                    <span className="font-semibold">$58,211</span>
+                  <div className="flex items-center gap-2 group-hover:scale-105 transition-transform duration-300">
+                    <div className="w-3 h-3 bg-black rounded-full" />
+                    <span className="text-muted-foreground font-inter">Current {revenueTimeframe === 'monthly' ? 'Week' : 'Year'}</span>
+                    <span className="font-semibold group-hover:text-primary transition-colors duration-300 font-inter">
+                      {revenueTimeframe === 'monthly' ? '$58,211' : '$2,800K'}
+                    </span>
                   </div>
-                  <div className="flex items-center gap-2">
-                    <div className="w-3 h-3 bg-muted-foreground rounded-full" />
-                    <span className="text-muted-foreground">Previous Week</span>
-                    <span className="font-semibold">$68,768</span>
+                  <div className="flex items-center gap-2 group-hover:scale-105 transition-transform duration-300">
+                    <div className="w-3 h-3 bg-blue-300 rounded-full" />
+                    <span className="text-muted-foreground font-inter">Previous {revenueTimeframe === 'monthly' ? 'Week' : 'Year'}</span>
+                    <span className="font-semibold group-hover:text-primary transition-colors duration-300 font-inter">
+                      {revenueTimeframe === 'monthly' ? '$68,768' : '$2,600K'}
+                    </span>
                   </div>
                 </div>
-              </CardHeader>
-              <CardContent>
-                <AdvancedLineChart data={revenueData} />
-              </CardContent>
-            </Card>
-          </SlideIn>
+              </div>
+            </CardHeader>
+            <CardContent className="flex-1">
+              <AdvancedLineChart 
+                data={revenueTimeframe === 'monthly' ? monthlyRevenueData : yearlyRevenueData} 
+                timeframe={revenueTimeframe}
+              />
+            </CardContent>
+          </Card>
         </div>
 
         {/* Right column - Revenue by Location */}
-        <div>
-          <SlideIn direction="right" delay={0.3}>
-            <Card className="h-fit transition-all duration-300 hover:shadow-lg">
-              <CardHeader>
-                <CardTitle>Revenue by Location</CardTitle>
-              </CardHeader>
-              <CardContent>
+        <div className="lg:col-span-1">
+          <Card className="h-full transition-all duration-300  bg-white border border-gray-200">
+            <CardHeader>
+              <CardTitle className="text-sm font-inter">Revenue by Location</CardTitle>
+            </CardHeader>
+            <CardContent>
                 <div className="space-y-6">
                   {/* World map with location markers */}
                   <div className="relative h-48 bg-gradient-to-br from-blue-50 to-blue-100 dark:from-blue-950/20 dark:to-blue-900/20 rounded-lg overflow-hidden">
@@ -231,22 +246,27 @@ export function EcommerceDashboard() {
                         <path
                           d="M50 80 Q100 60 150 80 T250 90 Q300 85 350 95 L350 120 Q300 110 250 115 T150 105 Q100 110 50 105 Z"
                           fill="currentColor"
-                          className="text-blue-600"
+                          className="text-blue-600 dark:text-blue-400"
                         />
                         <path
                           d="M80 130 Q120 120 160 130 T240 140 L240 160 Q200 150 160 155 Q120 160 80 155 Z"
                           fill="currentColor"
-                          className="text-blue-600"
+                          className="text-blue-600 dark:text-blue-400"
+                        />
+                        <path
+                          d="M100 50 Q150 40 200 50 T300 60 Q350 55 380 65 L380 80 Q350 70 300 75 T200 65 Q150 70 100 65 Z"
+                          fill="currentColor"
+                          className="text-blue-600 dark:text-blue-400"
                         />
                       </svg>
                     </div>
 
-                    {/* Location markers */}
+                    {/* Location markers with varying sizes based on revenue */}
                     {[
-                      { city: "New York", amount: "72K", x: 280, y: 120 },
-                      { city: "San Francisco", amount: "39K", x: 50, y: 140 },
-                      { city: "Sydney", amount: "25K", x: 350, y: 200 },
-                      { city: "Singapore", amount: "61K", x: 320, y: 160 },
+                      { city: "New York", amount: "72K", x: 280, y: 120, size: 8 },
+                      { city: "San Francisco", amount: "39K", x: 50, y: 140, size: 6 },
+                      { city: "Sydney", amount: "25K", x: 350, y: 200, size: 5 },
+                      { city: "Singapore", amount: "61K", x: 320, y: 160, size: 7 },
                     ].map((location) => (
                       <div
                         key={location.city}
@@ -257,9 +277,13 @@ export function EcommerceDashboard() {
                         }}
                       >
                         <div className="relative">
-                          <div className="w-3 h-3 bg-blue-500 rounded-full animate-pulse group-hover:scale-125 transition-transform duration-200" />
-                          <div className="absolute -top-8 left-1/2 transform -translate-x-1/2 bg-black/80 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-all duration-200 whitespace-nowrap">
-                            {location.city}: {location.amount}
+                          <div 
+                            className="bg-gradient-to-r from-blue-500 to-blue-600 rounded-full animate-pulse group-hover:scale-125 transition-all duration-300 shadow-lg"
+                            style={{ width: `${location.size * 4}px`, height: `${location.size * 4}px` }}
+                          />
+                          <div className="absolute -top-10 left-1/2 transform -translate-x-1/2 bg-background/95 backdrop-blur-sm border border-border text-foreground text-xs px-3 py-2 rounded-lg opacity-0 group-hover:opacity-100 transition-all duration-200 whitespace-nowrap shadow-xl">
+                            <div className="font-semibold">{location.city}</div>
+                            <div className="text-muted-foreground">{location.amount}</div>
                           </div>
                         </div>
                       </div>
@@ -269,18 +293,27 @@ export function EcommerceDashboard() {
                   {/* Location data */}
                   <StaggerContainer className="space-y-3" staggerDelay={0.05}>
                     {[
-                      { city: "New York", amount: "72K" },
-                      { city: "San Francisco", amount: "39K" },
-                      { city: "Sydney", amount: "25K" },
-                      { city: "Singapore", amount: "61K" },
+                      { city: "New York", amount: "72K", percentage: 35, color: "bg-blue-500" },
+                      { city: "San Francisco", amount: "39K", percentage: 19, color: "bg-green-500" },
+                      { city: "Sydney", amount: "25K", percentage: 12, color: "bg-purple-500" },
+                      { city: "Singapore", amount: "61K", percentage: 30, color: "bg-orange-500" },
                     ].map((location) => (
                       <StaggerItem key={location.city}>
-                        <div className="flex items-center justify-between p-2 rounded-lg hover:bg-muted/50 transition-all duration-200 cursor-pointer group">
-                          <div className="flex items-center gap-2">
-                            <MapPin className="h-4 w-4 text-blue-500 group-hover:scale-110 transition-transform duration-200" />
-                            <span className="text-sm font-medium">{location.city}</span>
+                        <div className="flex items-center justify-between p-3 rounded-lg hover:bg-muted/50 transition-all duration-200 cursor-pointer group">
+                          <div className="flex items-center gap-3">
+                            <div className={`w-3 h-3 rounded-full ${location.color} group-hover:scale-110 transition-transform duration-200`} />
+                            <MapPin className="h-4 w-4 text-muted-foreground group-hover:text-blue-500 transition-colors duration-200" />
+                            <span className="text-sm font-medium group-hover:text-foreground transition-colors duration-200">{location.city}</span>
                           </div>
-                          <span className="font-semibold">{location.amount}</span>
+                          <div className="flex items-center gap-3">
+                            <div className="w-16 bg-muted rounded-full h-2 overflow-hidden">
+                              <div 
+                                className={`h-full ${location.color} transition-all duration-500 group-hover:opacity-80`}
+                                style={{ width: `${location.percentage}%` }}
+                              />
+                            </div>
+                            <span className="font-semibold text-sm group-hover:text-primary transition-colors duration-200">{location.amount}</span>
+                          </div>
                         </div>
                       </StaggerItem>
                     ))}
@@ -288,155 +321,91 @@ export function EcommerceDashboard() {
                 </div>
               </CardContent>
             </Card>
-          </SlideIn>
         </div>
       </div>
 
       {/* Bottom section */}
-      <div className="grid gap-6 lg:grid-cols-4">
+      <div className="grid gap-6 lg:grid-cols-2">
         {/* Top Selling Products */}
-        <FadeIn delay={0.6}>
-          <Card className="lg:col-span-2 transition-all duration-300 hover:shadow-lg">
-            <CardHeader>
-              <CardTitle>Top Selling Products</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-4">
-                <div className="grid grid-cols-4 gap-4 text-xs font-medium text-muted-foreground pb-2 border-b">
-                  <span>Name</span>
-                  <span>Price</span>
-                  <span>Quantity</span>
-                  <span>Amount</span>
-                </div>
-                <StaggerContainer staggerDelay={0.05}>
-                  {topProducts.map((product, i) => (
-                    <StaggerItem key={i}>
-                      <div className="grid grid-cols-4 gap-4 text-sm py-2 hover:bg-muted/50 rounded-lg transition-all duration-200 cursor-pointer group">
-                        <div className="font-medium truncate group-hover:text-primary transition-colors duration-200">
-                          {product.name}
-                        </div>
-                        <div className="text-muted-foreground">{product.price}</div>
-                        <div>{product.quantity}</div>
-                        <div className="font-semibold">{product.amount}</div>
-                      </div>
-                    </StaggerItem>
-                  ))}
-                </StaggerContainer>
+        <Card className="transition-all duration-300  bg-white border border-gray-200">
+          <CardHeader>
+            <CardTitle className="font-inter">Top Selling Products</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-4">
+              <div className="grid grid-cols-4 gap-4 text-xs font-medium text-muted-foreground pb-2 border-b font-inter">
+                <span>Name</span>
+                <span>Price</span>
+                <span>Quantity</span>
+                <span>Amount</span>
               </div>
-            </CardContent>
-          </Card>
-        </FadeIn>
+              
+              {/* Loading State */}
+              {isLoading ? (
+                <div className="space-y-2 animate-pulse">
+                  {[...Array(itemsPerPage)].map((_, i) => (
+                    <div key={i} className="grid grid-cols-4 gap-4 py-2">
+                      <div className="h-4 bg-muted rounded animate-pulse"></div>
+                      <div className="h-4 bg-muted rounded animate-pulse"></div>
+                      <div className="h-4 bg-muted rounded animate-pulse"></div>
+                      <div className="h-4 bg-muted rounded animate-pulse"></div>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <div className="space-y-2 transition-all duration-300">
+                  {currentProducts.map((product, i) => (
+                    <div 
+                      key={startIndex + i} 
+                      className="grid grid-cols-4 gap-4 text-sm py-2 hover:bg-muted/50 rounded-lg transition-all duration-200 cursor-pointer group animate-in fade-in-0 slide-in-from-left-4"
+                      style={{ animationDelay: `${i * 50}ms` }}
+                    >
+                      <div className="font-medium truncate group-hover:text-primary transition-colors duration-200 font-inter">
+                        {product.name}
+                      </div>
+                      <div className="text-muted-foreground font-inter">{product.price}</div>
+                      <div className="font-inter">{product.quantity}</div>
+                      <div className="font-semibold font-inter">{product.amount}</div>
+                    </div>
+                  ))}
+                </div>
+              )}
+              
+              {/* Pagination */}
+              <div className="flex items-center justify-center gap-2 pt-4">
+                <button 
+                  onClick={() => handlePageChange(currentPage - 1)}
+                  disabled={currentPage === 1 || isLoading}
+                  className="px-3 py-1 text-xs text-muted-foreground hover:text-foreground transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  &lt;
+                </button>
+                <span className="text-xs text-muted-foreground px-2">
+                  {currentPage}/{totalPages}
+                </span>
+                <button 
+                  onClick={() => handlePageChange(currentPage + 1)}
+                  disabled={currentPage === totalPages || isLoading}
+                  className="px-3 py-1 text-xs text-muted-foreground hover:text-foreground transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  &gt;
+                </button>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
 
         {/* Total Sales */}
-        <FadeIn delay={0.7}>
-          <ScaleOnHover>
-            <Card className="transition-all duration-300 hover:shadow-lg cursor-pointer">
-              <CardHeader>
-                <CardTitle>Total Sales</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <AdvancedDonutChart data={salesData} className="h-64" />
-              </CardContent>
-            </Card>
-          </ScaleOnHover>
-        </FadeIn>
-
-        {/* Growth Trend */}
-        <FadeIn delay={0.8}>
-          <ScaleOnHover>
-            <Card className="transition-all duration-300 hover:shadow-lg cursor-pointer">
-              <CardHeader>
-                <CardTitle>Growth Trend</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <AreaChart data={growthData} color="hsl(var(--chart-3))" />
-              </CardContent>
-            </Card>
-          </ScaleOnHover>
-        </FadeIn>
+        <Card className="transition-all duration-300  cursor-pointer bg-white border border-gray-200">
+          <CardHeader>
+            <CardTitle className="font-inter">Total Sales</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <AdvancedDonutChart data={salesData} className="h-64" />
+          </CardContent>
+        </Card>
       </div>
 
-      {/* Activities & Contacts section */}
-      <div className="grid gap-6 lg:grid-cols-2">
-        {/* Activities */}
-        <SlideIn direction="up" delay={0.9}>
-          <Card className="transition-all duration-300 hover:shadow-lg">
-            <CardHeader>
-              <CardTitle>Activities</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <StaggerContainer className="space-y-4" staggerDelay={0.1}>
-                {activities.map((activity, i) => (
-                  <StaggerItem key={i}>
-                    <div className="flex items-start gap-3 p-2 rounded-lg hover:bg-muted/50 transition-all duration-200 cursor-pointer group">
-                      <div
-                        className={cn(
-                          "p-1 rounded-full transition-transform duration-200 group-hover:scale-110",
-                          activity.color,
-                        )}
-                      >
-                        <div className="w-6 h-6 rounded-full bg-white dark:bg-gray-800 flex items-center justify-center">
-                          {activity.type === "bug" && "🐛"}
-                          {activity.type === "release" && "🚀"}
-                          {activity.type === "edit" && "✏️"}
-                          {activity.type === "delete" && "🗑️"}
-                        </div>
-                      </div>
-                      <div className="flex-1 min-w-0">
-                        <p className="text-sm font-medium group-hover:text-primary transition-colors duration-200">
-                          {activity.user}
-                        </p>
-                        <p className="text-xs text-muted-foreground">{activity.time}</p>
-                      </div>
-                    </div>
-                  </StaggerItem>
-                ))}
-              </StaggerContainer>
-            </CardContent>
-          </Card>
-        </SlideIn>
-
-        {/* Contacts */}
-        <SlideIn direction="up" delay={1.0}>
-          <Card className="transition-all duration-300 hover:shadow-lg">
-            <CardHeader>
-              <CardTitle>Contacts</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <StaggerContainer className="space-y-3" staggerDelay={0.05}>
-                {contacts.map((contact) => (
-                  <StaggerItem key={contact.name}>
-                    <div className="flex items-center gap-3 p-2 rounded-lg hover:bg-muted/50 transition-all duration-200 cursor-pointer group">
-                      <div className="relative">
-                        <Avatar className="h-8 w-8 transition-transform duration-200 group-hover:scale-110">
-                          <AvatarImage src={contact.avatar || "/placeholder.svg"} />
-                          <AvatarFallback>
-                            {contact.name
-                              .split(" ")
-                              .map((n) => n[0])
-                              .join("")}
-                          </AvatarFallback>
-                        </Avatar>
-                        <div
-                          className={cn(
-                            "absolute -bottom-0.5 -right-0.5 w-3 h-3 rounded-full border-2 border-background transition-all duration-200",
-                            contact.status === "online" && "bg-green-500 group-hover:animate-pulse",
-                            contact.status === "away" && "bg-yellow-500",
-                            contact.status === "offline" && "bg-gray-400",
-                          )}
-                        />
-                      </div>
-                      <span className="text-sm font-medium group-hover:text-primary transition-colors duration-200">
-                        {contact.name}
-                      </span>
-                    </div>
-                  </StaggerItem>
-                ))}
-              </StaggerContainer>
-            </CardContent>
-          </Card>
-        </SlideIn>
-      </div>
     </div>
   )
 }

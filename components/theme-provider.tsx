@@ -26,7 +26,7 @@ const ThemeProviderContext = createContext<ThemeProviderState>(initialState)
 export function ThemeProvider({
   children,
   defaultTheme = "system",
-  storageKey = "vite-ui-theme",
+  storageKey = "ui-theme",
   ...props
 }: ThemeProviderProps) {
   const [theme, setTheme] = useState<Theme>(() => {
@@ -35,28 +35,61 @@ export function ThemeProvider({
     }
     return defaultTheme
   })
+  const [mounted, setMounted] = useState(false)
 
   useEffect(() => {
+    setMounted(true)
+  }, [])
+
+  useEffect(() => {
+    if (!mounted) return
+
     const root = window.document.documentElement
 
     root.classList.remove("light", "dark")
 
     if (theme === "system") {
       const systemTheme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light"
-
       root.classList.add(systemTheme)
-      return
+    } else {
+      root.classList.add(theme)
+    }
+  }, [theme, mounted])
+
+  useEffect(() => {
+    if (!mounted) return
+
+    const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)")
+    const handleChange = () => {
+      if (theme === "system") {
+        const root = window.document.documentElement
+        root.classList.remove("light", "dark")
+        const systemTheme = mediaQuery.matches ? "dark" : "light"
+        root.classList.add(systemTheme)
+      }
     }
 
-    root.classList.add(theme)
-  }, [theme])
+    mediaQuery.addEventListener("change", handleChange)
+    return () => mediaQuery.removeEventListener("change", handleChange)
+  }, [theme, mounted])
 
   const value = {
     theme,
     setTheme: (theme: Theme) => {
-      localStorage.setItem(storageKey, theme)
+      if (mounted) {
+        localStorage.setItem(storageKey, theme)
+      }
       setTheme(theme)
     },
+  }
+
+  // Prevent hydration mismatch by not rendering until mounted
+  if (!mounted) {
+    return (
+      <ThemeProviderContext.Provider {...props} value={value}>
+        {children}
+      </ThemeProviderContext.Provider>
+    )
   }
 
   return (
