@@ -14,6 +14,7 @@ import { FadeIn } from "@/components/animations/fade-in"
 import { SlideIn } from "@/components/animations/slide-in"
 import { StaggerContainer, StaggerItem } from "@/components/animations/stagger-container"
 import { ScaleOnHover } from "@/components/animations/scale-on-hover"
+import { OrderList } from "@/components/order-list"
 
 const metrics = [
   {
@@ -404,6 +405,11 @@ export function EcommerceDashboard() {
             <AdvancedDonutChart data={salesData} className="h-64" />
           </CardContent>
         </Card>
+      </div>
+
+      {/* Orders section on dashboard */}
+      <div className="mt-6">
+        <OrderList />
       </div>
 
     </div>
